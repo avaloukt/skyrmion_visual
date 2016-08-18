@@ -1,5 +1,5 @@
 /* all other browsers */
-  @keyframes spinner {
+ /* @keyframes spinner {
     from {
       -moz-transform: rotateX(45deg);
       -ms-transform: rotateX(45deg);
@@ -35,16 +35,16 @@
       transform: rotateY(360deg);
     }
   }
-
+*/
   #stage {
-    margin: 1em auto;
+/*    margin: 1em auto;
     -webkit-perspective: 1200px;
     -moz-perspective: 1200px;
     -ms-perspective: 1200px;
-    perspective: 200px; 
+    perspective: 200px; */
   }
 
-  #spinner {
+ /* #spinner {
 
     -webkit-animation-name: spinner;
     -webkit-animation-timing-function: linear;
@@ -65,4 +65,4 @@
   #spinner:hover {
     -webkit-animation-play-state: paused;
     animation-play-state: paused;
-  }
+  }*/
