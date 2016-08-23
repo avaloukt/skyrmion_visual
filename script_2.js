@@ -44,14 +44,24 @@ allRects = d3.select("#stage").selectAll('rect')
  center_element_y_integer = parseInt(center_element.attr('y'));
 
   //Select 3x3 array elements around center with d3 selection
- var subselection = d3.selectAll("rect").filter(
-  function(d){ 
-    return d3.select(this).attr('x') < (center_element_x_integer + 26) &&
-             d3.select(this).attr('x') > (center_element_x_integer - 26) &&
-             d3.select(this).attr('y') < (center_element_y_integer + 26) &&
-             d3.select(this).attr('y') > (center_element_y_integer - 26) ; 
-  }
- );
+  //var subselection = d3.selectAll("rect").filter(
+ //  function(d){ 
+ //    return d3.select(this).attr('x') < (center_element_x_integer + 26) &&
+ //             d3.select(this).attr('x') > (center_element_x_integer - 26) &&
+ //             d3.select(this).attr('y') < (center_element_y_integer + 26) &&
+ //             d3.select(this).attr('y') > (center_element_y_integer - 26) ; 
+ //  }
+ // );
+
+ var click_x, click_y, transform, x, y;
+
+ var rotations_data = [-45, 0, 45,
+                      90, 0, 90,
+                      45, 0, -45];
+
+ var rotations = _.map(_.zip(rotations_data), function(i){
+   return {rotation: i[0]}
+ })
 
 allRects.data(initialTranslateData)
     .enter().append('rect')
@@ -61,24 +71,38 @@ allRects.data(initialTranslateData)
     .style("fill", "red")    
     .on("click", function(d){
        //Rotation of the clicked element !!!
-        d3.select(this).transition().duration(500)
-        .attr("transform","translate("+ d.x +","+ d.y+") rotate(45)");
+       // d3.select(this).transition().duration(500)
+       // .attr("transform","translate("+ d.x +","+ d.y+") rotate(45)");
 
-        var click_x = d.x;
-        var click_y = d.y;
+        click_x = d.x;
+        click_y = d.y;
         console.log(click_x, click_y);
      
-        // var subselection = d3.selectAll("rect").filter(
-        //   function(d){ 
-        //     return d3.select(this).attr('x') < (center_element_x_integer + 26) &&
-        //              d3.select(this).attr('x') > (center_element_x_integer - 26) &&
-        //              d3.select(this).attr('y') < (center_element_y_integer + 26) &&
-        //              d3.select(this).attr('y') > (center_element_y_integer - 26) ; 
-        //   }
-        // );
-        // subselection.style("fill", "blue"); 
+        var subselection = d3.selectAll("rect").filter(
+            function(d){ 
+              return d.x < (click_x + 26) &&
+                      d.x > (click_x - 26) &&
+                      d.y < (click_y + 26) &&
+                      d.y > (click_y - 26) ; 
+            }
+        );
+        subselection.style("fill", "blue");
+        
+        //need to update data(either of subselection or for all) with rotation values but also x,x, id values (maybe merge?)
+        subselection.data()
+
+        subselection.data(rotations).transition().duration(2500).attr("transform",vortexAnimation);
+
 
     });
+
+function attachX(d){
+  return d.x;
+}
+
+function attachY(d){
+  return d.y;
+}
 
 function initialTranslate(d){
   return "translate("+ d.x +","+ d.y+")";
@@ -91,7 +115,37 @@ function vortexArraySubSelection(d){
            d3.select(this).attr('y') < (d.y + 26) &&
            d3.select(this).attr('y') > (d.y - 26) ; 
 }
- 
+
+function vortexAnimation(d) {
+  //this.parentNode.appendChild(this);
+
+    //d3.select(this).attr("height",  d.height);
+    //calculate x origin and y origin for each of them
+    //var id = d3.select(this).attr("id");
+    var x_o = +d.x +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
+    var y_o= +d.y + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
+    console.log("enters of rotation",x_o,y_o)
+
+    //d3.select(this)
+    //transform="matrix(1, 0, 0, 1, x_o-1*x_o, y_o-1*y_o)"
+
+    //return  "matrix(1, 0, 0, 1, " +x_o-1*x_o ","+ y_o-1*y_o+ ")";
+
+    return  "rotate("+d.rotation+", "+ x_o+", "+y_o+")";
+    //return  "translate("+x_o+","+y_o+") rotate("+d.rotation+") translate("+ -x_o+","+ - y_o+")";
+    
+   //  d3.select(this)
+   // // .style("pointer-events", "none")
+   //  .transition()
+   //    .duration(1500)
+   //    .attr("transform", 
+   //          "rotate(" + d.rotation + "," +
+   //          ( d3.select(this).attr("x") + d3.select(this).attr('width')/2 )+ "," +
+   //          ( d3.select(this).attr('y') + d3.select(this).attr('height')/2 )+")")
+   //    .attr("height",  d.height); 
+}
+
+
 
 
 

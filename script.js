@@ -82,49 +82,49 @@ rect.style("fill", "red");
  console.log(transformations)
 
 
- subselection.data(transformations);
- subselection.on("mouseover", mouseover);
+ subselection.data(transformations).transition().duration(2500).attr("transform",vortexAnimation);
+ //subselection.on("mouseover", mouseover);
 
- function mouseover(d) {
-  //this.parentNode.appendChild(this);
-  var x_o = +d3.select(this).attr("x") +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
-  var y_o= +d3.select(this).attr("y") + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
-
-  d3.select(this)
-      .style("pointer-events", "none")
-      .transition()
-      .duration(3000)
-      .attr("transform", "rotate(45)");
-}
-
-//  function vortexAnimation(d) {
+//  function mouseover(d) {
 //   //this.parentNode.appendChild(this);
+//   var x_o = +d3.select(this).attr("x") +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
+//   var y_o= +d3.select(this).attr("y") + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
 
-//     //d3.select(this).attr("height",  d.height);
-//     //calculate x origin and y origin for each of them
-//     var id = d3.select(this).attr("id");
-//     var x_o = +d3.select(this).attr("x") +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
-//     var y_o= +d3.select(this).attr("y") + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
-//     console.log(id,x_o,y_o)
-
-//     //d3.select(this)
-//     //transform="matrix(1, 0, 0, 1, x_o-1*x_o, y_o-1*y_o)"
-
-//     //return  "matrix(1, 0, 0, 1, " +x_o-1*x_o ","+ y_o-1*y_o+ ")";
-
-//     return  "rotate("+d.rotation+", "+ x_o+", "+y_o+")";
-//     //return  "translate("+x_o+","+y_o+") rotate("+d.rotation+") translate("+ -x_o+","+ - y_o+")";
-    
-//    //  d3.select(this)
-//    // // .style("pointer-events", "none")
-//    //  .transition()
-//    //    .duration(1500)
-//    //    .attr("transform", 
-//    //          "rotate(" + d.rotation + "," +
-//    //          ( d3.select(this).attr("x") + d3.select(this).attr('width')/2 )+ "," +
-//    //          ( d3.select(this).attr('y') + d3.select(this).attr('height')/2 )+")")
-//    //    .attr("height",  d.height); 
+//   d3.select(this)
+//       .style("pointer-events", "none")
+//       .transition()
+//       .duration(3000)
+//       .attr("transform", "rotate(45)");
 // }
+
+ function vortexAnimation(d) {
+  //this.parentNode.appendChild(this);
+
+    //d3.select(this).attr("height",  d.height);
+    //calculate x origin and y origin for each of them
+    var id = d3.select(this).attr("id");
+    var x_o = +d3.select(this).attr("x") +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
+    var y_o= +d3.select(this).attr("y") + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
+    console.log(id,x_o,y_o)
+
+    //d3.select(this)
+    //transform="matrix(1, 0, 0, 1, x_o-1*x_o, y_o-1*y_o)"
+
+    //return  "matrix(1, 0, 0, 1, " +x_o-1*x_o ","+ y_o-1*y_o+ ")";
+
+    return  "rotate("+d.rotation+", "+ x_o+", "+y_o+")";
+    //return  "translate("+x_o+","+y_o+") rotate("+d.rotation+") translate("+ -x_o+","+ - y_o+")";
+    
+   //  d3.select(this)
+   // // .style("pointer-events", "none")
+   //  .transition()
+   //    .duration(1500)
+   //    .attr("transform", 
+   //          "rotate(" + d.rotation + "," +
+   //          ( d3.select(this).attr("x") + d3.select(this).attr('width')/2 )+ "," +
+   //          ( d3.select(this).attr('y') + d3.select(this).attr('height')/2 )+")")
+   //    .attr("height",  d.height); 
+}
 
 
 
