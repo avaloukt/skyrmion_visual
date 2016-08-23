@@ -89,7 +89,7 @@ allRects.data(initialTranslateData)
         subselection.style("fill", "blue");
         
         //need to update data(either of subselection or for all) with rotation values but also x,x, id values (maybe merge?)
-        subselection.data()
+        //subselection.data()
 
         subselection.data(rotations).transition().duration(2500).attr("transform",vortexAnimation);
 
@@ -124,14 +124,14 @@ function vortexAnimation(d) {
     //var id = d3.select(this).attr("id");
     var x_o = +d.x +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
     var y_o= +d.y + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
-    console.log("enters of rotation",x_o,y_o)
+    console.log("centers of rotation",x_o,y_o)
 
     //d3.select(this)
     //transform="matrix(1, 0, 0, 1, x_o-1*x_o, y_o-1*y_o)"
 
     //return  "matrix(1, 0, 0, 1, " +x_o-1*x_o ","+ y_o-1*y_o+ ")";
 
-    return  "rotate("+d.rotation+", "+ x_o+", "+y_o+")";
+    return  "translate("+ d.x +","+ d.y+") rotate(45)";
     //return  "translate("+x_o+","+y_o+") rotate("+d.rotation+") translate("+ -x_o+","+ - y_o+")";
     
    //  d3.select(this)
