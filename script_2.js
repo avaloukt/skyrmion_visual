@@ -1,6 +1,6 @@
 $( document ).ready(function() {
 
-// right rotation transition for one rect
+//right rotation transition for one rect
 // d3.select("#stage")
 //   .append('rect')
 //   .attr('id',"centerElement")
@@ -31,17 +31,23 @@ allRects = d3.select("#stage").selectAll('rect')
                100, 100, 100, 100, 100,
                125, 125, 125, 125, 125];
 
+ var initial_rotation_data = [0, 0, 0, 0, 0,
+                       0, 0, 0, 0, 0,
+                       0, 0, 0, 0, 0,
+                       0, 0, 0, 0, 0,
+                       0, 0, 0, 0, 0];
+
  var ids = d3.range( 5*5 );
 
- var initialTranslateData = _.map(_.zip(x_data, y_data, ids), function(i){
-    return {x: i[0], y: i[1], id:i[2]}
+ var initialTranslateData = _.map(_.zip(x_data, y_data, ids, initial_rotation_data), function(i){
+    return {x: i[0], y: i[1], id:i[2], rotation:i[3]}
  })
- console.log(initialTranslateData)
+ //console.log(initialTranslateData)
 
  //DEFINE CENTER ELEMENT CONSTANTS
- var center_element = $('#12');
- center_element_x_integer = parseInt(center_element.attr('x'));
- center_element_y_integer = parseInt(center_element.attr('y'));
+ // var center_element = $('#12');
+ // center_element_x_integer = parseInt(center_element.attr('x'));
+ // center_element_y_integer = parseInt(center_element.attr('y'));
 
   //Select 3x3 array elements around center with d3 selection
   //var subselection = d3.selectAll("rect").filter(
@@ -55,11 +61,11 @@ allRects = d3.select("#stage").selectAll('rect')
 
  var click_x, click_y, transform, x, y;
 
- var rotations_data = [-45, 0, 45,
+ var rotation_matrix = [-45, 0, 45,
                       90, 0, 90,
                       45, 0, -45];
 
- var rotations = _.map(_.zip(rotations_data), function(i){
+ var rotations = _.map(_.zip(rotation_matrix), function(i){
    return {rotation: i[0]}
  })
 
@@ -76,9 +82,9 @@ allRects.data(initialTranslateData)
 
         click_x = d.x;
         click_y = d.y;
-        console.log(click_x, click_y);
+        //console.log(click_x, click_y);
      
-        var subselection = d3.selectAll("rect").filter(
+        var subselection = d3.select("#stage").selectAll("rect").filter(
             function(d){ 
               return d.x < (click_x + 26) &&
                       d.x > (click_x - 26) &&
@@ -86,15 +92,41 @@ allRects.data(initialTranslateData)
                       d.y > (click_y - 26) ; 
             }
         );
-        subselection.style("fill", "blue");
+        //subselection.style("fill", "blue");
+        console.log(subselection.data())
         
-        //need to update data(either of subselection or for all) with rotation values but also x,x, id values (maybe merge?)
+        //****START HERE******
+        //merge subselection.data.rotation with rotation matrix
+          //for each object in data, access rotation value and change it with rotation_matrix[i]
+          //subselection.data(new_subselection_data)
+
+
+        //aply the trasnfromation for the whole selection
+        
+
+
+        //need to update data(either of subselection or for all) with rotation values but also x,y, id values (maybe merge?)
         //subselection.data()
 
-        subselection.data(rotations).transition().duration(2500).attr("transform",vortexAnimation);
+        // subselection.data(rotations).transition().duration(2500).attr("transform",vortexAnimation);
+        
+        // d3.select("#stage").selectAll('rect').filter(
+        //   function(d) {
+        //     console.log(d.x)
+        //     if ( d.x < (click_x + 26) && d.x > (click_x - 26) &&
+        //          d.y < (click_y + 26) &&  d.y > (click_y - 26)  ) {
+        //             d.rotation = 45;
+        //             console.log(d);
+        //     }
+        //   }
+        // );
+
+        
 
 
     });
+
+
 
 function attachX(d){
   return d.x;
@@ -109,7 +141,7 @@ function initialTranslate(d){
 }
 
 function vortexArraySubSelection(d){ 
-  console.log("vortexSubSelection")
+  //console.log("vortexSubSelection")
   return d3.select(this).attr('x') < (d.x + 26) &&
            d3.select(this).attr('x') > (d.x - 26) &&
            d3.select(this).attr('y') < (d.y + 26) &&
@@ -124,7 +156,7 @@ function vortexAnimation(d) {
     //var id = d3.select(this).attr("id");
     var x_o = +d.x +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
     var y_o= +d.y + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
-    console.log("centers of rotation",x_o,y_o)
+    //console.log("centers of rotation",x_o,y_o)
 
     //d3.select(this)
     //transform="matrix(1, 0, 0, 1, x_o-1*x_o, y_o-1*y_o)"
