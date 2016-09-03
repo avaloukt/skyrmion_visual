@@ -93,13 +93,19 @@ allRects.data(initialTranslateData)
             }
         );
         //subselection.style("fill", "blue");
-        console.log(subselection.data())
+        //console.log(subselection.data())
         
         //****START HERE******
         //merge subselection.data.rotation with rotation matrix
           //for each object in data, access rotation value and change it with rotation_matrix[i]
           //subselection.data(new_subselection_data)
+          var i = 0;
+          subselection.data().forEach(function(d){
+            d.rotation = rotation_matrix[i];
+            i++;
+          });
 
+          d3.select("#stage").selectAll('rect').transition().duration(2500).attr("transform",vortexAnimation);
 
         //aply the trasnfromation for the whole selection
         
@@ -154,8 +160,8 @@ function vortexAnimation(d) {
     //d3.select(this).attr("height",  d.height);
     //calculate x origin and y origin for each of them
     //var id = d3.select(this).attr("id");
-    var x_o = +d.x +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
-    var y_o= +d.y + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
+   // var x_o = +d.x +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
+    //var y_o= +d.y + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
     //console.log("centers of rotation",x_o,y_o)
 
     //d3.select(this)
@@ -163,7 +169,7 @@ function vortexAnimation(d) {
 
     //return  "matrix(1, 0, 0, 1, " +x_o-1*x_o ","+ y_o-1*y_o+ ")";
 
-    return  "translate("+ d.x +","+ d.y+") rotate(45)";
+    return  "translate("+ d.x +","+ d.y+") rotate("+ d.rotation +")";
     //return  "translate("+x_o+","+y_o+") rotate("+d.rotation+") translate("+ -x_o+","+ - y_o+")";
     
    //  d3.select(this)
