@@ -76,26 +76,26 @@ allRects.data(initialTranslateData)
     .attr("height", 10)
     .style("fill", "red")    
     .on("click", function(d){
-        
-      //  Reset all rotated rect to initail zero rotation
-      //It does what I want but consider initial translate
-      //Maybe subselect those that d.rotation != 0 make d.roattion = 0 transition to translate d.x d.y 
-      //and then apply center clicked transformation
 
-        // d3.select("#stage").selectAll('rect').data().forEach(function(d){
-        //   d.rotation = 0;
-        //   console.log(d.rotation);
-        // });
+        //*****Reset rotated elemenets
+        //Subselection of elements already rotated
+        var rotated_subselection = d3.select("#stage").selectAll("rect").filter(
+            function(d){ 
+              return d.rotation != 0; 
+            }
+        );
+        //Set d rotation to 0  
+        rotated_subselection.data().forEach(function(d){
+          d.rotation = 0;     
+        });
+        //Transition for all rects depending on their d.rotation
+        d3.select("#stage").selectAll('rect').transition().duration(2500).attr("transform",vortexAnimation);
 
-        // d3.select("#stage").selectAll('rect').attr("transform", function(d) {
-        //   "translate("+ 0 +","+ 0+") rotate("+ d.rotation +") translate("+ d.x +","+ d.y+")";
-        //   console.log(d.x, d.y);
-        // });
-
+        //***Get dx and dy of clicked element
         click_x = d.x;
         click_y = d.y;
 
-        //Subsel;ection of elements in matrix around clicked object
+        //****Subsel;ection of elements in matrix around clicked object
         var subselection = d3.select("#stage").selectAll("rect").filter(
             function(d){ 
               return d.x < (click_x + 26) &&
@@ -104,15 +104,12 @@ allRects.data(initialTranslateData)
                       d.y > (click_y - 26) ; 
             }
         );
-        
-
         //Alter rotation data of subselection
         var i = 0;
         subselection.data().forEach(function(d){
           d.rotation = rotation_matrix[i];
           i++;
-        });
-        
+        });  
         //Transition for all rects depending on their d.rotation
         d3.select("#stage").selectAll('rect').transition().duration(2500).attr("transform",vortexAnimation);
 
