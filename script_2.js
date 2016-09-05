@@ -17,6 +17,9 @@ $( document ).ready(function() {
 
 allRects = d3.select("#stage").selectAll('rect')
 
+//Rect initial width and height
+var rect_width = 3;
+var rect_height = 10;
 
 //Bind x,y data for all rect
  var x_data = [25, 50, 75, 100, 125,
@@ -38,6 +41,16 @@ allRects = d3.select("#stage").selectAll('rect')
                        0, 0, 0, 0, 0];
 
  var ids = d3.range( 5*5 );
+ 
+ //Alter initail centering by width/2 and height by 2
+ //*** Need to FIX Rotattion Center
+ for(i=0; i < x_data.length; i++){
+    x_data[i] = x_data[i] + (rect_width/2); 
+ }
+
+ for(i=0; i < y_data.length; i++){
+    y_data[i] = y_data[i] + (rect_height/2); 
+ }
 
  var initialTranslateData = _.map(_.zip(x_data, y_data, ids, initial_rotation_data), function(i){
     return {x: i[0], y: i[1], id:i[2], rotation:i[3]}
@@ -62,7 +75,7 @@ allRects = d3.select("#stage").selectAll('rect')
  var click_x, click_y, transform, x, y;
 
  var rotation_matrix = [-45, 0, 45,
-                      90, 0, 90,
+                      -90, 0, 90,
                       45, 0, -45];
 
  var rotations = _.map(_.zip(rotation_matrix), function(i){
@@ -76,7 +89,9 @@ allRects.data(initialTranslateData)
     .attr("height", 10)
     .style("fill", "red")    
     .on("click", function(d){
-
+         
+        // mouseover
+         
         //*****Reset rotated elemenets
         //Subselection of elements already rotated
         var rotated_subselection = d3.select("#stage").selectAll("rect").filter(
@@ -89,7 +104,7 @@ allRects.data(initialTranslateData)
           d.rotation = 0;     
         });
         //Transition for all rects depending on their d.rotation
-        d3.select("#stage").selectAll('rect').transition().duration(2500).attr("transform",vortexAnimation);
+        d3.select("#stage").selectAll('rect').transition().duration(1500).attr("transform",vortexAnimation);
 
         //***Get dx and dy of clicked element
         click_x = d.x;
@@ -98,6 +113,7 @@ allRects.data(initialTranslateData)
         //****Subsel;ection of elements in matrix around clicked object
         var subselection = d3.select("#stage").selectAll("rect").filter(
             function(d){ 
+              //was 26
               return d.x < (click_x + 26) &&
                       d.x > (click_x - 26) &&
                       d.y < (click_y + 26) &&
@@ -111,7 +127,7 @@ allRects.data(initialTranslateData)
           i++;
         });  
         //Transition for all rects depending on their d.rotation
-        d3.select("#stage").selectAll('rect').transition().duration(2500).attr("transform",vortexAnimation);
+        d3.select("#stage").selectAll('rect').transition().duration(1500).attr("transform",vortexAnimation);
 
     });
 
@@ -170,24 +186,6 @@ function vortexAnimation(d) {
  //Rotation of the clicked element !!!
  // d3.select(this).transition().duration(500)
  // .attr("transform","translate("+ d.x +","+ d.y+") rotate(45)");
-
- //subselection.style("fill", "blue");
-
-   //need to update data(either of subselection or for all) with rotation values but also x,y, id values (maybe merge?)
-  //subselection.data()
-
-  // subselection.data(rotations).transition().duration(2500).attr("transform",vortexAnimation);
-
-  // d3.select("#stage").selectAll('rect').filter(
-  //   function(d) {
-  //     console.log(d.x)
-  //     if ( d.x < (click_x + 26) && d.x > (click_x - 26) &&
-  //          d.y < (click_y + 26) &&  d.y > (click_y - 26)  ) {
-  //             d.rotation = 45;
-  //             console.log(d);
-  //     }
-  //   }
-  // );
 
 
 });
