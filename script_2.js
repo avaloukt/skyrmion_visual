@@ -44,6 +44,8 @@ var rect_height = 10;
  
  //Alter initail centering by width/2 and height by 2
  //*** Need to FIX Rotattion Center
+ //try initial x, y as it is just change rotation point
+ //what's the trick with Bbox?
  for(i=0; i < x_data.length; i++){
     x_data[i] = x_data[i] + (rect_width/2); 
  }
