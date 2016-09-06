@@ -1,19 +1,4 @@
-$( document ).ready(function() {
-
-//right rotation transition for one rect
-// d3.select("#stage")
-//   .append('rect')
-//   .attr('id',"centerElement")
-//   .attr('height', 10)
-//   .attr('width', 3)
-//   .attr('fill', 'red')
-//   .attr("transform","translate(75,75)")
-//   .on("click", function(){
-//     d3.select("#centerElement").transition().duration(2500)
-//       .attr("transform","translate(75, 75) rotate(45)");
-//   }
-
-//   );
+ $( document ).ready(function() {
 
 allRects = d3.select("#stage").selectAll('rect')
 
@@ -21,7 +6,7 @@ allRects = d3.select("#stage").selectAll('rect')
 var rect_width = 3;
 var rect_height = 10;
 
-//Bind x,y data for all rect
+//Bind x,y data for all rects
  var x_data = [25, 50, 75, 100, 125,
                25, 50, 75, 100, 125,
                25, 50, 75, 100, 125,
@@ -42,37 +27,23 @@ var rect_height = 10;
 
  var ids = d3.range( 5*5 );
  
- //Alter initail centering by width/2 and height by 2
+ //Alter initail centering by width/2 and height/2
  //*** Need to FIX Rotattion Center
  //try initial x, y as it is just change rotation point
  //what's the trick with Bbox?
- for(i=0; i < x_data.length; i++){
-    x_data[i] = x_data[i] + (rect_width/2); 
- }
 
- for(i=0; i < y_data.length; i++){
-    y_data[i] = y_data[i] + (rect_height/2); 
- }
+ // for(i=0; i < x_data.length; i++){
+ //    x_data[i] = x_data[i] + (rect_width/2); 
+ // }
+
+ // for(i=0; i < y_data.length; i++){
+ //    y_data[i] = y_data[i] + (rect_height/2); 
+ // }
 
  var initialTranslateData = _.map(_.zip(x_data, y_data, ids, initial_rotation_data), function(i){
     return {x: i[0], y: i[1], id:i[2], rotation:i[3]}
  })
- //console.log(initialTranslateData)
 
- //DEFINE CENTER ELEMENT CONSTANTS
- // var center_element = $('#12');
- // center_element_x_integer = parseInt(center_element.attr('x'));
- // center_element_y_integer = parseInt(center_element.attr('y'));
-
-  //Select 3x3 array elements around center with d3 selection
-  //var subselection = d3.selectAll("rect").filter(
- //  function(d){ 
- //    return d3.select(this).attr('x') < (center_element_x_integer + 26) &&
- //             d3.select(this).attr('x') > (center_element_x_integer - 26) &&
- //             d3.select(this).attr('y') < (center_element_y_integer + 26) &&
- //             d3.select(this).attr('y') > (center_element_y_integer - 26) ; 
- //  }
- // );
 
  var click_x, click_y, transform, x, y;
 
@@ -84,6 +55,7 @@ var rect_height = 10;
    return {rotation: i[0]}
  })
 
+//Initialisation 
 allRects.data(initialTranslateData)
     .enter().append('rect')
     .attr("transform", initialTranslate)
@@ -93,6 +65,8 @@ allRects.data(initialTranslateData)
     .on("click", function(d){
          
         // mouseover
+
+        //alter dx, d.y of all rects with new center of origin
          
         //*****Reset rotated elemenets
         //Subselection of elements already rotated
@@ -171,6 +145,9 @@ function vortexAnimation(d) {
     //return  "matrix(1, 0, 0, 1, " +x_o-1*x_o ","+ y_o-1*y_o+ ")";
 
     return  "translate("+ d.x +","+ d.y+") rotate("+ d.rotation +")";
+
+
+
     //return  "translate("+x_o+","+y_o+") rotate("+d.rotation+") translate("+ -x_o+","+ - y_o+")";
     
    //  d3.select(this)
@@ -182,12 +159,45 @@ function vortexAnimation(d) {
    //          ( d3.select(this).attr("x") + d3.select(this).attr('width')/2 )+ "," +
    //          ( d3.select(this).attr('y') + d3.select(this).attr('height')/2 )+")")
    //    .attr("height",  d.height); 
-}
+} 
+
+
 
 
  //Rotation of the clicked element !!!
  // d3.select(this).transition().duration(500)
  // .attr("transform","translate("+ d.x +","+ d.y+") rotate(45)");
+
+ //right rotation transition for one rect
+// d3.select("#stage")
+//   .append('rect')
+//   .attr('id',"centerElement")
+//   .attr('height', 10)
+//   .attr('width', 3)
+//   .attr('fill', 'red')
+//   .attr("transform","translate(75,75)")
+//   .on("click", function(){
+//     d3.select("#centerElement").transition().duration(2500)
+//       .attr("transform","translate(75, 75) rotate(45)");
+//   }
+//   );
+
+  //console.log(initialTranslateData)
+
+ //DEFINE CENTER ELEMENT CONSTANTS
+ // var center_element = $('#12');
+ // center_element_x_integer = parseInt(center_element.attr('x'));
+ // center_element_y_integer = parseInt(center_element.attr('y'));
+
+  //Select 3x3 array elements around center with d3 selection
+  //var subselection = d3.selectAll("rect").filter(
+ //  function(d){ 
+ //    return d3.select(this).attr('x') < (center_element_x_integer + 26) &&
+ //             d3.select(this).attr('x') > (center_element_x_integer - 26) &&
+ //             d3.select(this).attr('y') < (center_element_y_integer + 26) &&
+ //             d3.select(this).attr('y') > (center_element_y_integer - 26) ; 
+ //  }
+ // );
 
 
 });
