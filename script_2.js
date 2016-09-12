@@ -64,7 +64,7 @@ allRects.data(initialTranslateData)
     .style("fill", "red")    
     .on("click", function(d){
          
-        // mouseover
+        // mouseover or click
 
         //alter dx, d.y of all rects with new center of origin
          
@@ -80,7 +80,7 @@ allRects.data(initialTranslateData)
           d.rotation = 0;     
         });
         //Transition for all rects depending on their d.rotation
-        d3.select("#stage").selectAll('rect').transition().duration(1500).attr("transform",vortexAnimation);
+        d3.select("#stage").selectAll('rect').transition().duration(700).attr("transform",vortexAnimation);
 
         //***Get dx and dy of clicked element
         click_x = d.x;
@@ -103,7 +103,7 @@ allRects.data(initialTranslateData)
           i++;
         });  
         //Transition for all rects depending on their d.rotation
-        d3.select("#stage").selectAll('rect').transition().duration(1500).attr("transform",vortexAnimation);
+        d3.select("#stage").selectAll('rect').transition().duration(700).attr("transform",vortexAnimation);
 
     });
 
