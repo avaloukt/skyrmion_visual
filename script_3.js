@@ -7,6 +7,14 @@ var rect_width = 2;
 var rect_height = 2;
 
 //Bind x,y data for all rects
+
+var x_scale = [];
+for(i=25;i<=875;i+=25){
+  x_scale.push(i);
+  
+}
+//console.log(x_data_large.length);
+
  var x_data = [25, 50, 75, 100, 125,
                25, 50, 75, 100, 125,
                25, 50, 75, 100, 125,
@@ -152,7 +160,7 @@ function vortexAnimation(d) {
     //var y_o= +d.y + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
     //console.log("centers of rotation",x_o,y_o)
 
-    console.log(this.getBBox());
+    //console.log(this.getBBox());
 
     var coord = this.getBBox();
     
