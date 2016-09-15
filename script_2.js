@@ -57,9 +57,9 @@ var rect_height = 2;
                       -90, 0, 90,
                       45, 0, -45];
 
- var scale_y_matrix = [4, 4, 4,
-                      4, 1, 4,
-                      4, 4, 4];
+ var scale_y_matrix = [5, 5, 5,
+                      5, 1, 5,
+                      5, 5, 5];
 
  // var rotations = _.map(_.zip(rotation_matrix), function(i){
  //   return {rotation: i[0]}
@@ -152,9 +152,14 @@ function vortexAnimation(d) {
     //var y_o= +d.y + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
     //console.log("centers of rotation",x_o,y_o)
 
+    console.log(this.getBBox());
 
+    var coord = this.getBBox();
+    
 
-    return  "translate("+ d.x +","+ d.y+") rotate("+ d.rotation +") scale(1.5, "+ d.scale_y +")";
+    return  "translate("+ d.x +","+ d.y+") rotate("+ d.rotation+', '+ (coord.x+(coord.width/2)) +', '+ (coord.y+(coord.height/2))+") scale(1.5, "+ d.scale_y +")";
+    
+
 
 
 
