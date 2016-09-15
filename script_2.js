@@ -3,8 +3,8 @@
 allRects = d3.select("#stage").selectAll('rect')
 
 //Rect initial width and height
-var rect_width = 3;
-var rect_height = 10;
+var rect_width = 2;
+var rect_height = 2;
 
 //Bind x,y data for all rects
  var x_data = [25, 50, 75, 100, 125,
@@ -25,6 +25,12 @@ var rect_height = 10;
                        0, 0, 0, 0, 0,
                        0, 0, 0, 0, 0];
 
+ var initial_scale_y_data = [1, 1, 1, 1, 1,
+                       1, 1, 1, 1, 1,
+                       1, 1, 1, 1, 1,
+                       1, 1, 1, 1, 1,
+                       1, 1, 1, 1, 1];
+
  var ids = d3.range( 5*5 );
  
  //Alter initail centering by width/2 and height/2
@@ -40,8 +46,8 @@ var rect_height = 10;
  //    y_data[i] = y_data[i] + (rect_height/2); 
  // }
 
- var initialTranslateData = _.map(_.zip(x_data, y_data, ids, initial_rotation_data), function(i){
-    return {x: i[0], y: i[1], id:i[2], rotation:i[3]}
+ var initialTranslateData = _.map(_.zip(x_data, y_data, ids, initial_rotation_data, initial_scale_y_data), function(i){
+    return {x: i[0], y: i[1], id:i[2], rotation:i[3], scale_y: i[4]}
  })
 
 
@@ -51,42 +57,48 @@ var rect_height = 10;
                       -90, 0, 90,
                       45, 0, -45];
 
- var rotations = _.map(_.zip(rotation_matrix), function(i){
-   return {rotation: i[0]}
- })
+ var scale_y_matrix = [4, 4, 4,
+                      4, 1, 4,
+                      4, 4, 4];
+
+ // var rotations = _.map(_.zip(rotation_matrix), function(i){
+ //   return {rotation: i[0]}
+ // })
 
 //Initialisation 
 allRects.data(initialTranslateData)
     .enter().append('rect')
     .attr("transform", initialTranslate)
-    .attr("width", 3)
-    .attr("height", 10)
+    .attr("width", rect_width)
+    .attr("height", rect_height)
     .style("fill", "red")    
     .on("click", function(d){
          
         // mouseover or click
 
-        //alter dx, d.y of all rects with new center of origin
          
         //*****Reset rotated elemenets
         //Subselection of elements already rotated
         var rotated_subselection = d3.select("#stage").selectAll("rect").filter(
             function(d){ 
-              return d.rotation != 0; 
+              return (d.rotation != 0) || (d.scale_y != 1); 
             }
         );
-        //Set d rotation to 0  
+        //Set d.rotation to 0  
         rotated_subselection.data().forEach(function(d){
-          d.rotation = 0;     
+          d.rotation = 0;  
+          d.scale_y = 1;   
         });
         //Transition for all rects depending on their d.rotation
         d3.select("#stage").selectAll('rect').transition().duration(700).attr("transform",vortexAnimation);
+
+
 
         //***Get dx and dy of clicked element
         click_x = d.x;
         click_y = d.y;
 
-        //****Subsel;ection of elements in matrix around clicked object
+        //****Subselection of elements in matrix around clicked object
         var subselection = d3.select("#stage").selectAll("rect").filter(
             function(d){ 
               //was 26
@@ -100,6 +112,7 @@ allRects.data(initialTranslateData)
         var i = 0;
         subselection.data().forEach(function(d){
           d.rotation = rotation_matrix[i];
+          d.scale_y = scale_y_matrix[i]; 
           i++;
         });  
         //Transition for all rects depending on their d.rotation
@@ -139,12 +152,9 @@ function vortexAnimation(d) {
     //var y_o= +d.y + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
     //console.log("centers of rotation",x_o,y_o)
 
-    //d3.select(this)
-    //transform="matrix(1, 0, 0, 1, x_o-1*x_o, y_o-1*y_o)"
 
-    //return  "matrix(1, 0, 0, 1, " +x_o-1*x_o ","+ y_o-1*y_o+ ")";
 
-    return  "translate("+ d.x +","+ d.y+") rotate("+ d.rotation +")";
+    return  "translate("+ d.x +","+ d.y+") rotate("+ d.rotation +") scale(1.5, "+ d.scale_y +")";
 
 
 
