@@ -3,71 +3,98 @@
 allRects = d3.select("#stage").selectAll('rect')
 
 //Rect initial width and height
-var rect_width = 2;
-var rect_height = 2;
+var rect_width = 3;
+var rect_height = 3;
 
-//Bind x,y data for all rects
 
+//X,Y axes scales
 var x_scale = [];
 for(i=25;i<=875;i+=25){
-  x_scale.push(i);
-  
+  x_scale.push(i);  
 }
-//console.log(x_data_large.length);
+//console.log(x_scale.length)
 
- var x_data = [25, 50, 75, 100, 125,
-               25, 50, 75, 100, 125,
-               25, 50, 75, 100, 125,
-               25, 50, 75, 100, 125,
-               25, 50, 75, 100, 125];
+var y_scale = [];
+for(i=25;i<=425;i+=25){
+  y_scale.push(i);  
+}
+//console.log(y_scale.length)
 
- var y_data = [25, 25, 25, 25, 25,
-               50, 50, 50, 50, 50,
-               75, 75, 75, 75, 75,
-               100, 100, 100, 100, 100,
-               125, 125, 125, 125, 125];
 
- var initial_rotation_data = [0, 0, 0, 0, 0,
-                       0, 0, 0, 0, 0,
-                       0, 0, 0, 0, 0,
-                       0, 0, 0, 0, 0,
-                       0, 0, 0, 0, 0];
+//X_DATA
+var x_data = [];
 
- var initial_scale_y_data = [1, 1, 1, 1, 1,
-                       1, 1, 1, 1, 1,
-                       1, 1, 1, 1, 1,
-                       1, 1, 1, 1, 1,
-                       1, 1, 1, 1, 1];
+for( j=0; j<y_scale.length; j++ ){
+  for( i=0; i<x_scale.length; i++ ) {
+    x_data.push(x_scale[i]);
+  }
+}
+//console.log(x_data.length)
 
- var ids = d3.range( 5*5 );
+//Y_DATA
+var y_data = [];
+
+for( j=0; j<y_scale.length; j++ ){
+  for( i=0; i<x_scale.length; i++ ) {
+    y_data.push(y_scale[j]);
+  }
+} 
+//console.log(y_data.length)  //1225 should be 595
+
+//INITIAL_ROATATION_DATA
+ var initial_rotation_data = [];
+ for(i=0; i<(x_scale.length * y_scale.length); i++) { initial_rotation_data.push(0);}
+  //console.log(initial_rotation_data.length)
+
+ //INITIAL_SCALE_DATA
+ var initial_scale_y_data = [];
+ for(i=0; i<(x_scale.length * y_scale.length); i++) { initial_scale_y_data.push(1);}
+  //console.log(initial_scale_y_data.length)
  
- //Alter initail centering by width/2 and height/2
- //*** Need to FIX Rotattion Center
- //try initial x, y as it is just change rotation point
- //what's the trick with Bbox?
-
- // for(i=0; i < x_data.length; i++){
- //    x_data[i] = x_data[i] + (rect_width/2); 
- // }
-
- // for(i=0; i < y_data.length; i++){
- //    y_data[i] = y_data[i] + (rect_height/2); 
- // }
+ //IDs
+ var ids = d3.range( x_scale.length * y_scale.length );
+ 
 
  var initialTranslateData = _.map(_.zip(x_data, y_data, ids, initial_rotation_data, initial_scale_y_data), function(i){
     return {x: i[0], y: i[1], id:i[2], rotation:i[3], scale_y: i[4]}
  })
+ //console.log(initialTranslateData)
 
 
  var click_x, click_y, transform, x, y;
 
- var rotation_matrix = [-45, 0, 45,
-                      -90, 0, 90,
-                      45, 0, -45];
+ var rotation_matrix = [0, 0, -15, -10, 0,  10, 15, 0, 0, 
+                         0,-45,-35,-20, 0,  20, 35, 45, 0, 
+                        -65,-55,-45,-30,0, 30, 45, 55, 65,
+                        -75,-75,-70,-45,0, 45, 70, 75, 75,
+                        -90,-90,-90,-90,0, 90,90,90,90,
+    
+                        75,75,70,45,    0, -45, -70, -75, -75,
+                        65,55,45,30,    0, -30, -45, -55, -65,
+                        0,45,35,20,     0,  -20, -35, -45, 0, 
+                        0,0, 15, 10,    0,  -10, -15, 0, 0 
+                      ];
 
- var scale_y_matrix = [5, 5, 5,
-                      5, 1, 5,
-                      5, 5, 5];
+ var scale_y_matrix = [ 1, 1, 2, 3,    4,  3, 2, 1, 1, 
+                        1, 3, 6, 7,    7,  7, 6, 3, 1, 
+                        2, 6.5, 7, 7, 6.5, 7, 7, 6.5,2,
+                        4, 6.5, 7, 5,  3,  5, 7, 6.5,4,
+                        4, 7, 7, 3,    1,  3, 7, 7,  4,
+    
+                        4,6.5, 7, 5,   3,  5, 7, 6.5,4,
+                        2,6.5,7,7,     6.5, 7, 7, 6.5,2,
+                        1,3,6,7,        7,  7, 6, 3, 1, 
+                        1,1,2,3,        4,  3, 2, 1, 1
+                      ];
+ 
+ // var rotation_matrix = [-45, 0, 45,
+ //                      -90, 0, 90,
+ //                      -135, -180, 135];
+
+ // var scale_y_matrix = [5, 5, 5,
+ //                      5, 1, 5,
+ //                      5, 5, 5];
+
 
  // var rotations = _.map(_.zip(rotation_matrix), function(i){
  //   return {rotation: i[0]}
@@ -79,7 +106,7 @@ allRects.data(initialTranslateData)
     .attr("transform", initialTranslate)
     .attr("width", rect_width)
     .attr("height", rect_height)
-    .style("fill", "red")    
+    .style("fill", "white")    
     .on("mouseover", function(d){
          
         // mouseover or click
@@ -110,10 +137,10 @@ allRects.data(initialTranslateData)
         var subselection = d3.select("#stage").selectAll("rect").filter(
             function(d){ 
               //was 26
-              return d.x < (click_x + 26) &&
-                      d.x > (click_x - 26) &&
-                      d.y < (click_y + 26) &&
-                      d.y > (click_y - 26) ; 
+              return d.x < (click_x + 101) &&
+                      d.x > (click_x - 101) &&
+                      d.y < (click_y + 101) &&
+                      d.y > (click_y - 101) ; 
             }
         );
         //Alter rotation data of subselection
@@ -144,83 +171,17 @@ function initialTranslate(d){
 
 function vortexArraySubSelection(d){ 
   //console.log("vortexSubSelection")
-  return d3.select(this).attr('x') < (d.x + 26) &&
-           d3.select(this).attr('x') > (d.x - 26) &&
-           d3.select(this).attr('y') < (d.y + 26) &&
-           d3.select(this).attr('y') > (d.y - 26) ; 
+  return d3.select(this).attr('x') < (d.x + 101) &&
+           d3.select(this).attr('x') > (d.x - 101) &&
+           d3.select(this).attr('y') < (d.y + 101) &&
+           d3.select(this).attr('y') > (d.y - 101) ; 
 }
 
 function vortexAnimation(d) {
-  //this.parentNode.appendChild(this);
-
-    //d3.select(this).attr("height",  d.height);
-    //calculate x origin and y origin for each of them
-    //var id = d3.select(this).attr("id");
-   // var x_o = +d.x +  (this.getBBox().width / 2); //(d3.select(this).attr("width")/2); // + 
-    //var y_o= +d.y + (this.getBBox().height / 2); //(d3.select(this).attr("height")/2); //(
-    //console.log("centers of rotation",x_o,y_o)
-
-    //console.log(this.getBBox());
-
-    var coord = this.getBBox();
-    
-
-    return  "translate("+ d.x +","+ d.y+") rotate("+ d.rotation+', '+ (coord.x+(coord.width/2)) +', '+ (coord.y+(coord.height/2))+") scale(1.5, "+ d.scale_y +")";
-    
-
-
-
-
-    //return  "translate("+x_o+","+y_o+") rotate("+d.rotation+") translate("+ -x_o+","+ - y_o+")";
-    
-   //  d3.select(this)
-   // // .style("pointer-events", "none")
-   //  .transition()
-   //    .duration(1500)
-   //    .attr("transform", 
-   //          "rotate(" + d.rotation + "," +
-   //          ( d3.select(this).attr("x") + d3.select(this).attr('width')/2 )+ "," +
-   //          ( d3.select(this).attr('y') + d3.select(this).attr('height')/2 )+")")
-   //    .attr("height",  d.height); 
+  var coord = this.getBBox();
+  return  "translate("+ d.x +","+ d.y+") rotate("+ d.rotation+', '+ (coord.x+(coord.width/2)) +', '+ (coord.y+(coord.height/2))+") scale(1, "+ d.scale_y +")";
+  //return  "translate("+ d.x +","+ d.y+") rotate("+ d.rotation +") scale(1, "+ d.scale_y +")";
 } 
-
-
-
-
- //Rotation of the clicked element !!!
- // d3.select(this).transition().duration(500)
- // .attr("transform","translate("+ d.x +","+ d.y+") rotate(45)");
-
- //right rotation transition for one rect
-// d3.select("#stage")
-//   .append('rect')
-//   .attr('id',"centerElement")
-//   .attr('height', 10)
-//   .attr('width', 3)
-//   .attr('fill', 'red')
-//   .attr("transform","translate(75,75)")
-//   .on("click", function(){
-//     d3.select("#centerElement").transition().duration(2500)
-//       .attr("transform","translate(75, 75) rotate(45)");
-//   }
-//   );
-
-  //console.log(initialTranslateData)
-
- //DEFINE CENTER ELEMENT CONSTANTS
- // var center_element = $('#12');
- // center_element_x_integer = parseInt(center_element.attr('x'));
- // center_element_y_integer = parseInt(center_element.attr('y'));
-
-  //Select 3x3 array elements around center with d3 selection
-  //var subselection = d3.selectAll("rect").filter(
- //  function(d){ 
- //    return d3.select(this).attr('x') < (center_element_x_integer + 26) &&
- //             d3.select(this).attr('x') > (center_element_x_integer - 26) &&
- //             d3.select(this).attr('y') < (center_element_y_integer + 26) &&
- //             d3.select(this).attr('y') > (center_element_y_integer - 26) ; 
- //  }
- // );
 
 
 });
