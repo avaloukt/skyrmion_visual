@@ -75,6 +75,19 @@ for( j=0; j<y_scale.length; j++ ){
                         0,0, 15, 10,    0,  -10, -15, 0, 0 
                       ];
 
+  //Rotation matrix with both top and bottom elements turn upwards
+ // var rotation_matrix = [0, 0, 165, 170, 0,  -170, -165, 0, 0, 
+ //                         0,135,145,160, 0,  -160, -145, -135, 0, 
+ //                        115,125,135,150,0, -150, -135, -125, -115,
+ //                        105,105,110,135,0, -135, -110, -105, -105,
+ //                        -90,-90,-90,-90,0, 90,90,90,90,
+    
+ //                   -105,-105,-110,-135, 0, 135, 110, 105, 105,
+ //                  -115,-125,-135,-150,  0, 150, 135, 125, 115,
+ //                    0,-135,-145,-160,   0, 160, 145, 135, 0, 
+ //                     0,0, -165, -170,   0, 170, 165, 0, 0 
+ //                      ];
+
  var scale_y_matrix = [ 1, 1, 2, 3,    4,  3, 2, 1, 1, 
                         1, 3, 6, 7,    7,  7, 6, 3, 1, 
                         2, 6.5, 7, 7, 6.5, 7, 7, 6.5,2,
@@ -133,25 +146,29 @@ allRects.data(initialTranslateData)
         click_x = d.x;
         click_y = d.y;
 
-        //****Subselection of elements in matrix around clicked object
-        var subselection = d3.select("#stage").selectAll("rect").filter(
-            function(d){ 
-              //was 26
-              return d.x < (click_x + 101) &&
-                      d.x > (click_x - 101) &&
-                      d.y < (click_y + 101) &&
-                      d.y > (click_y - 101) ; 
-            }
-        );
-        //Alter rotation data of subselection
-        var i = 0;
-        subselection.data().forEach(function(d){
-          d.rotation = rotation_matrix[i];
-          d.scale_y = scale_y_matrix[i]; 
-          i++;
-        });  
-        //Transition for all rects depending on their d.rotation
-        d3.select("#stage").selectAll('rect').transition().duration(700).attr("transform",vortexAnimation);
+        //*** Check if click in the desired area left&right - 4columns, top&bottom -4 rows to do animation
+        if(d.x < 800 && d.x > 100 && d.y > 100 && d.y < 350){
+        
+            //****Subselection of elements in matrix around clicked object
+            var subselection = d3.select("#stage").selectAll("rect").filter(
+                function(d){ 
+                  //was 26
+                  return d.x < (click_x + 101) &&
+                          d.x > (click_x - 101) &&
+                          d.y < (click_y + 101) &&
+                          d.y > (click_y - 101) ; 
+                }
+            );
+            //Alter rotation data of subselection
+            var i = 0;
+            subselection.data().forEach(function(d){
+              d.rotation = rotation_matrix[i];
+              d.scale_y = scale_y_matrix[i]; 
+              i++;
+            });  
+            //Transition for all rects depending on their d.rotation
+            d3.select("#stage").selectAll('rect').transition().duration(700).attr("transform",vortexAnimation);
+        }
 
     });
 
